@@ -132,10 +132,10 @@ jobs:
               exit 1
             fi
             wails3 task windows:create:nsis:installer INSTALL_SCOPE=user
-            cp -f bin/*-installer.exe release/
+            cp -f dist/*-installer.exe release/
           else
             wails3 task darwin:package:universal
-            ditto -c -k --keepParent bin/ZAntiMotion.app release/ZAntiMotion-macos-universal.zip
+            ditto -c -k --keepParent dist/ZAntiMotion.app release/ZAntiMotion-macos-universal.zip
           fi
           ls -la release/
 
