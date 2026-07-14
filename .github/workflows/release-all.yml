@@ -22,8 +22,6 @@ jobs:
         include:
           - os: windows-latest
             platform: windows
-          - os: ubuntu-24.04
-            platform: linux
           - os: macos-latest
             platform: macos
 
@@ -118,12 +116,6 @@ jobs:
           Add-Content -Path $env:GITHUB_PATH -Value $nsisDir
           & (Join-Path $nsisDir 'makensis.exe') /VERSION
 
-      - name: Install Linux deps
-        if: matrix.platform == 'linux'
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libgtk-4-dev libwebkitgtk-6.0-dev pkg-config build-essential
-
       - name: Build
         working-directory: repo
         shell: bash
@@ -142,13 +134,6 @@ jobs:
             python scripts/sync-nsis.py
             wails3 task windows:create:nsis:installer INSTALL_SCOPE=user
             cp -f bin/*-installer.exe release/
-          elif [ "${{ matrix.platform }}" = "linux" ]; then
-            if wails3 task linux:create:deb && wails3 task linux:create:rpm; then
-              cp -f bin/*.deb bin/*.rpm release/ 2>/dev/null || true
-            else
-              wails3 task linux:build
-              cp -f bin/ZAntiMotion release/ZAntiMotion-linux-amd64
-            fi
           else
             wails3 task darwin:package:universal
             ditto -c -k --keepParent bin/ZAntiMotion.app release/ZAntiMotion-macos-universal.zip
