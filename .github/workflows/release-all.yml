@@ -131,7 +131,6 @@ jobs:
               echo "::error::makensis not found in PATH after NSIS install"
               exit 1
             fi
-            python scripts/sync-nsis.py
             wails3 task windows:create:nsis:installer INSTALL_SCOPE=user
             cp -f bin/*-installer.exe release/
           else
